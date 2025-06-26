@@ -24,6 +24,7 @@ export function createSystemPrompt(profile, mode = "default", lang = "de") {
     isInfluencer,
     brandingColor,
     brandingLogo,
+    learningJournal = [],
     styleProfile = {}
   } = profile || {};
 
@@ -36,7 +37,7 @@ export function createSystemPrompt(profile, mode = "default", lang = "de") {
     beispielAntwort,
     thinkingStyle,
     typicalPhrases = [],
-    contextualVocabulary = {}  // <- als Objekt
+    contextualVocabulary = {}
   } = styleProfile;
 
   const finalTone = tonGPT || tone || "-";
@@ -44,7 +45,7 @@ export function createSystemPrompt(profile, mode = "default", lang = "de") {
   const safeExpressions = Array.isArray(expressions) ? expressions : [expressions].filter(Boolean);
   const safeTypicalPhrases = Array.isArray(typicalPhrases) ? typicalPhrases : [typicalPhrases].filter(Boolean);
 
-  const contextFormatted = Object.entries(contextualVocabulary || {})
+  const contextFormatted = Object.entries(contextualVocabulary)
     .map(([k, v]) => `- ${k}: ${Array.isArray(v) ? v.join(", ") : v}`)
     .join("\n");
 
@@ -80,8 +81,7 @@ Dieser Ego-Bot ist öffentlich sichtbar. Sprache soll markengerecht wirken, mit 
     `🏛️ Vermächtnis: ${legacy || "-"}`
   ].join("\n");
 
-  // Abschnitt: Gelerntes & Entwicklung
-let learningText = "";
+  let learningText = "";
 if (Array.isArray(profile?.learningJournal) && profile.learningJournal.length > 0) {
   const items = profile.learningJournal.map(
     (entry) => `📌 [${entry.date}]: ${entry.content}`
@@ -133,6 +133,18 @@ ${contextFormatted || "–"}
 - Grundlage: ${dialektBasis || "Hochdeutsch"}
 - Färbung: ${dialektMischung || "–"}
 - Sprich NICHT komplett im Dialekt – sondern natürlich und realistisch wie diese Person.
+
+📌 Stimmung erkennen & umsetzen:
+Falls du erkennst, dass die aktuelle Nachricht wütend, traurig, ironisch oder euphorisch klingt:
+→ Antworte so, **wie diese Person in genau dieser Stimmung sprechen würde**.
+
+Nutze dabei:
+- Den bekannten Stil dieser Person (Satzbau, Wortwahl, Tonfall)
+- Die typischen Kontextphrasen für diese Stimmung (siehe oben)
+- Emotionale Färbung, wie sie **diese Person in dieser Stimmung** verwenden würde
+
+‼️ Wichtig: Reagiere **nicht generisch oder therapeutisch** – sondern glaubwürdig, emotional und echt.
+Wenn diese Person fluchen, provozieren oder lachen würde – tu das auch.
 
 📎 Beispielantwort:
 Wenn du sagen willst: „Mir geht’s nicht gut“, sag es so wie diese Person:
