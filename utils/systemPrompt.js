@@ -1,5 +1,5 @@
 
-export function createSystemPrompt(profile, mode = "default", lang = "de") {
+export function createSystemPrompt(profile, mode = "default", lang = "de", mood = null) {
   const {
     name,
     age,
