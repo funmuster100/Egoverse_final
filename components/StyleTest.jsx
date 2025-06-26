@@ -37,55 +37,56 @@ export default function StyleTest({ onComplete }) {
     }
   };
 
-const analyzeStyle = async (answers) => {
-  setLoading(true);
-  try {
-    const res = await fetch("/api/analyze-style", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ chatText: answers.join("\n") }),
-    });
+  const analyzeStyle = async (answers) => {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/analyze-style", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chatText: answers.join("\n") }),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    const {
-      stil,
-      ton,
-      dialektBasis,
-      dialektMischung,
-      expressions,
-      beispielAntwort,
-      thinkingStyle,
-      typicalPhrases,
-      contextualVocabulary
-    } = data;
+      const {
+        stil,
+        ton,
+        dialektBasis,
+        dialektMischung,
+        expressions,
+        beispielAntwort,
+        thinkingStyle,
+        typicalPhrases,
+        contextualVocabulary
+      } = data;
 
-    const styleProfile = [stil, ton, dialektMischung].filter(Boolean);
+      const result = {
+        styleProfile: {
+          stil,
+          ton,
+          dialektBasis,
+          dialektMischung,
+          expressions: Array.isArray(expressions)
+            ? expressions
+            : expressions?.split(",").map((s) => s.trim()) || [],
+          beispielAntwort,
+          thinkingStyle,
+          typicalPhrases: Array.isArray(typicalPhrases)
+            ? typicalPhrases
+            : typicalPhrases?.split(",").map((s) => s.trim()) || [],
+          contextualVocabulary
+        }
+      };
 
-    const result = {
-      styleProfile,
-      tone: ton,
-      dialect: dialektBasis,
-      expressions: Array.isArray(expressions)
-        ? expressions
-        : expressions?.split(",").map((s) => s.trim()) || [],
-      beispielAntwort,
-      thinkingStyle,
-      typicalPhrases: Array.isArray(typicalPhrases)
-        ? typicalPhrases
-        : typicalPhrases?.split(",").map((s) => s.trim()) || [],
-      contextualVocabulary
-    };
-
-    onComplete(result);
-  } catch (err) {
-    console.error("Analysefehler:", err);
-    setError("Analyse fehlgeschlagen. Bitte versuch es später nochmal.");
-    onComplete({});
-  } finally {
-    setLoading(false);
-  }
-};
+      onComplete(result);
+    } catch (err) {
+      console.error("Analysefehler:", err);
+      setError("Analyse fehlgeschlagen. Bitte versuch es später nochmal.");
+      onComplete({});
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div style={{
