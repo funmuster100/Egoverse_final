@@ -146,21 +146,12 @@ const [brandingColor, setBrandingColor] = useState("#00ff88"); // oder beliebige
         backdropFilter: "blur(6px)",
       }}>
         {isStyleTestStep ? (
-         <StyleTest
-  onComplete={({ styleProfile, thinkingStyle, typicalPhrases, dialektBasis, dialektMischung, beispielAntwort, expressions }) => {
-    const combinedStyleProfile = {
-      styleProfile,
-      thinkingStyle,
-      typicalPhrases,
-      dialektBasis,
-      dialektMischung,
-      beispielAntwort,
-      expressions
-    };
-
+         // AUSSCHNITT aus onboarding-multi.jsx
+<StyleTest
+  onComplete={(styleProfile) => {
     const fullProfile = {
       ...answers,
-      styleProfile: combinedStyleProfile,  // 🧠 sauber verschachtelt
+      styleProfile, // ✅ direkt übernehmen ohne combinedStyleProfile
       avatar,
       brandingLogo,
       brandingColor,
@@ -169,7 +160,7 @@ const [brandingColor, setBrandingColor] = useState("#00ff88"); // oder beliebige
     localStorage.setItem("ego_profile", JSON.stringify(fullProfile));
     router.push("/summary");
   }}
-/> 
+/>
 
         ) : isAvatarStep ? (
           <>
