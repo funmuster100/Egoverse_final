@@ -1,0 +1,34 @@
+.container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 2rem;
+}
+
+.avatarCard {
+  border: 2px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  text-align: center;
+  padding: 10px;
+  transition: border 0.3s;
+}
+
+.avatarCard:hover {
+  border-color: var(--primary);
+}
+
+.selected {
+  border-color: var(--primary);
+  background: var(--accent);
+}
+
+.avatarImage {
+  border-radius: 50%;
+}
+
+.label {
+  margin-top: 10px;
+  font-weight: 500;
+}

@@ -1,0 +1,53 @@
+
+/* Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+/* Farbvariablen – Light Mode */
+:root {
+  --bg: #0f1116;
+  --text: #e6e6e6;
+  --primary: #00f5a0;
+  --bubble-user: #167bf7;
+  --bubble-bot: rgba(255, 255, 255, 0.1);
+  --border: #2c2c2c;
+  --accent: rgba(255, 255, 255, 0.08);
+}
+
+/* Dark Theme (optional, falls Light Mode aktivierbar wäre) */
+[data-theme="light"] {
+  --bg: #f9f9f9;
+  --text: #222;
+  --primary: #00cc88;
+  --bubble-user: #d7ecff;
+  --bubble-bot: #ffffff;
+  --border: #ddd;
+  --accent: #f0f4f8;
+}
+
+/* Reset + Basis */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg);
+  color: var(--text);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Optional: Scrollbar modernisieren */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+}
