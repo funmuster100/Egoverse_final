@@ -18,6 +18,8 @@ export default function StyleTest({ onComplete }) {
   const [allAnswers, setAllAnswers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [freeInput, setFreeInput] = useState("");
+  const [showFreeText, setShowFreeText] = useState(false);
 
   const sendAnswer = () => {
     if (!input.trim()) return;
@@ -33,17 +35,17 @@ export default function StyleTest({ onComplete }) {
         setStep(step + 1);
       }, 500);
     } else {
-      analyzeStyle([...allAnswers, input]);
+      setShowFreeText(true);
     }
   };
 
-  const analyzeStyle = async (answers) => {
+  const analyzeStyle = async (allText) => {
     setLoading(true);
     try {
       const res = await fetch("/api/analyze-style", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ chatText: answers.join("\n") }),
+        body: JSON.stringify({ chatText: allText }),
       });
 
       const data = await res.json();
@@ -88,6 +90,12 @@ export default function StyleTest({ onComplete }) {
     }
   };
 
+  const handleFreeSubmit = () => {
+    if (!freeInput.trim()) return;
+    const combinedText = [...allAnswers, freeInput].join("\n");
+    analyzeStyle(combinedText);
+  };
+
   return (
     <div style={{
       background: "rgba(255,255,255,0.05)",
@@ -101,75 +109,88 @@ export default function StyleTest({ onComplete }) {
     }}>
       <h2 style={{ marginBottom: "1rem" }}>🗣 Schreibstil-Test</h2>
 
-      <div
-        style={{
-          maxHeight: "300px",
-          overflowY: "auto",
-          display: "flex",
-          flexDirection: "column",
-          gap: "12px",
-          padding: "1rem",
-          background: "#111",
-          borderRadius: "12px",
-          fontSize: "1rem",
-          lineHeight: "1.5",
-        }}
-      >
-        {messages.map((msg, i) => (
-          <div
-            key={i}
-            style={{
-              alignSelf: msg.from === "user" ? "flex-end" : "flex-start",
-              background: msg.from === "user" ? "#2563eb" : "rgba(255,255,255,0.1)",
-              padding: "10px 14px",
-              borderRadius: "14px",
-              maxWidth: "80%",
-              color: "#fff",
-            }}
-          >
-            {msg.text}
+      {!showFreeText ? (
+        <>
+          <div style={{ maxHeight: "300px", overflowY: "auto", display: "flex", flexDirection: "column", gap: "12px", padding: "1rem", background: "#111", borderRadius: "12px" }}>
+            {messages.map((msg, i) => (
+              <div key={i} style={{
+                alignSelf: msg.from === "user" ? "flex-end" : "flex-start",
+                background: msg.from === "user" ? "#2563eb" : "rgba(255,255,255,0.1)",
+                padding: "10px 14px",
+                borderRadius: "14px",
+                maxWidth: "80%",
+                color: "#fff",
+              }}>
+                {msg.text}
+              </div>
+            ))}
+            {loading && (
+              <div style={{ alignSelf: "center", marginTop: "1rem", color: "#0f0" }}>
+                ✨ Stil wird analysiert...
+              </div>
+            )}
           </div>
-        ))}
-        {loading && (
-          <div style={{ alignSelf: "center", marginTop: "1rem", color: "#0f0" }}>
-            ✨ Stil wird analysiert...
-          </div>
-        )}
-      </div>
 
-      {!loading && (
-        <div style={{ marginTop: "1rem", display: "flex", gap: "8px" }}>
-          <input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && sendAnswer()}
-            placeholder="Deine Antwort..."
+          {!loading && (
+            <div style={{ marginTop: "1rem", display: "flex", gap: "8px" }}>
+              <input
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && sendAnswer()}
+                placeholder="Deine Antwort..."
+                style={{ flex: 1, padding: "12px", fontSize: "1rem", borderRadius: "10px", border: "1px solid #333", background: "#222", color: "#eee" }}
+              />
+              <button
+                onClick={sendAnswer}
+                style={{ background: "#10b981", color: "#fff", border: "none", padding: "0 18px", borderRadius: "10px", fontWeight: "bold", fontSize: "1rem", cursor: "pointer" }}
+              >
+                Senden
+              </button>
+            </div>
+          )}
+        </>
+      ) : (
+        <>
+          <p style={{ marginBottom: "1rem", lineHeight: "1.6" }}>
+            ✍️ Jetzt bist du dran! Schreib hier bitte frei von der Leber weg – als würdest du mit einem Freund chatten.
+            <br />
+            Nutze Emojis, rede im Dialekt, mach Pausen, sei ironisch oder emotional – ganz wie du eben bist. Du kannst über deinen Tag, Gedanken, Sorgen, Ziele oder was auch immer reden.
+          </p>
+          <textarea
+            value={freeInput}
+            onChange={(e) => setFreeInput(e.target.value)}
+            rows={8}
+            placeholder="Hier kannst du alles loswerden..."
             style={{
-              flex: 1,
-              padding: "12px",
-              fontSize: "1rem",
+              width: "100%",
+              padding: "1rem",
               borderRadius: "10px",
-              border: "1px solid #333",
               background: "#222",
+              border: "1px solid #333",
               color: "#eee",
+              fontSize: "1rem",
+              fontFamily: "inherit",
+              lineHeight: "1.6",
+              marginBottom: "1rem"
             }}
           />
           <button
-            onClick={sendAnswer}
+            onClick={handleFreeSubmit}
+            disabled={loading}
             style={{
               background: "#10b981",
               color: "#fff",
+              padding: "12px 24px",
               border: "none",
-              padding: "0 18px",
               borderRadius: "10px",
-              fontWeight: "bold",
               fontSize: "1rem",
-              cursor: "pointer",
+              fontWeight: "bold",
+              cursor: "pointer"
             }}
           >
-            Senden
+            Abschicken
           </button>
-        </div>
+        </>
       )}
 
       {error && <p style={{ color: "red", marginTop: "1rem" }}>{error}</p>}
