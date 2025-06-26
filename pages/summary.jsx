@@ -66,19 +66,25 @@ export default function Summary() {
 
         <h3 style={styles.sectionTitle}>🧾 Dein Profil</h3>
         <ul style={styles.infoList}>
-          <Info label="Beruf" value={profile.job} />
-          <Info label="Kommunikationsstil" value={profile.style} />
-          <Info label="Typischer Satz" value={`„${profile.phrase}“`} />
-          <Info label="Werte" value={profile.values} />
-          <Info label="Humor" value={profile.humor} />
-          <Info label="Tonfall" value={profile.tone} />
-          <Info label="Hobbys" value={profile.hobbies} />
-          <Info label="Beziehungen" value={profile.relationships} />
-          <Info label="Dialekt" value={profile.dialect} />
-          <Info label="Denkweise" value={profile.thinkingStyle} />
-          <Info label="Typische Ausdrücke" value={profile.expressions} />
-          <Info label="Typische Phrasen" value={(profile.typicalPhrases || []).join(", ")} />
-        </ul>
+  <Info label="Beruf" value={profile.job} />
+  <Info label="Kommunikationsstil" value={profile.style || profile.styleProfile?.stil} />
+  <Info label="Typischer Satz" value={`„${profile.phrase || "..."}“`} />
+  <Info label="Werte" value={profile.values || profile.styleProfile?.values} />
+  <Info label="Humor" value={profile.humor} />
+  <Info label="Tonfall" value={profile.tone || profile.styleProfile?.ton} />
+  <Info label="Hobbys" value={profile.hobbies} />
+  <Info label="Beziehungen" value={profile.relationships} />
+  <Info label="Dialekt" value={profile.dialect || profile.styleProfile?.dialektBasis} />
+  <Info label="Denkweise" value={profile.thinkingStyle || profile.styleProfile?.thinkingStyle} />
+  <Info
+    label="Typische Ausdrücke"
+    value={(profile.expressions || profile.styleProfile?.expressions || []).join(", ")}
+  />
+  <Info
+    label="Typische Phrasen"
+    value={(profile.typicalPhrases || profile.styleProfile?.typicalPhrases || []).join(", ")}
+  />
+</ul>
 
         <h3 style={styles.sectionTitle}>🗣️ So klingt dein Ego-Zwilling</h3>
         <div style={styles.exampleBox}>
