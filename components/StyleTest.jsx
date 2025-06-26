@@ -37,7 +37,7 @@ export default function StyleTest({ onComplete }) {
     }
   };
 
-  const analyzeStyle = async (answers) => {
+const analyzeStyle = async (answers) => {
   setLoading(true);
   try {
     const res = await fetch("/api/analyze-style", {
@@ -60,31 +60,22 @@ export default function StyleTest({ onComplete }) {
       contextualVocabulary
     } = data;
 
-    const styleProfile = {
-  stil,
-  ton,
-  dialektBasis,
-  dialektMischung,
-  expressions: Array.isArray(expressions)
-    ? expressions
-    : expressions?.split(",").map((s) => s.trim()) || [],
-  beispielAntwort,
-  thinkingStyle,
-  typicalPhrases: Array.isArray(typicalPhrases)
-    ? typicalPhrases
-    : typicalPhrases?.split(",").map((s) => s.trim()) || [],
-  contextualVocabulary
-};
-const result = {
-  styleProfile,
-  tone: ton,
-  dialect: dialektBasis,
-  expressions: styleProfile.expressions,
-  beispielAntwort,
-  thinkingStyle,
-  typicalPhrases: styleProfile.typicalPhrases,
-  contextualVocabulary
-};
+    const styleProfile = [stil, ton, dialektMischung].filter(Boolean);
+
+    const result = {
+      styleProfile,
+      tone: ton,
+      dialect: dialektBasis,
+      expressions: Array.isArray(expressions)
+        ? expressions
+        : expressions?.split(",").map((s) => s.trim()) || [],
+      beispielAntwort,
+      thinkingStyle,
+      typicalPhrases: Array.isArray(typicalPhrases)
+        ? typicalPhrases
+        : typicalPhrases?.split(",").map((s) => s.trim()) || [],
+      contextualVocabulary
+    };
 
     onComplete(result);
   } catch (err) {
