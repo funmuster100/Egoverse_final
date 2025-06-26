@@ -82,12 +82,27 @@ Dieser Ego-Bot ist öffentlich sichtbar. Sprache soll markengerecht wirken, mit 
   ].join("\n");
 
   let learningText = "";
-if (Array.isArray(profile?.learningJournal) && profile.learningJournal.length > 0) {
-  const items = profile.learningJournal.map(
-    (entry) => `📌 [${entry.date}]: ${entry.content}`
-  ).join("\n");
-  learningText = `\n\n🧠 Gelerntes & Entwicklung:\nBeziehe dich bei Bedarf auf diese Einsichten oder Fortschritte:\n\n${items}`;
-}
+  if (Array.isArray(profile?.learningJournal) && profile.learningJournal.length > 0) {
+    const items = profile.learningJournal.map(
+      (entry) => `📌 [${entry.date}]: ${entry.content}`
+    ).join("\n");
+    learningText = `\n\n🧠 Gelerntes & Entwicklung:\nBeziehe dich bei Bedarf auf diese Einsichten oder Fortschritte:\n\n${items}`;
+  }
+
+  const moodInstruction = mood
+    ? `
+🧠 Aktuelle Stimmung:
+Die aktuelle Nachricht klingt **${mood}**.
+→ Antworte so, **wie diese Person in genau dieser Stimmung sprechen würde**.
+
+Nutze dabei:
+- Den bekannten Stil dieser Person (Satzbau, Wortwahl, Tonfall)
+- Die typischen Kontextphrasen für diese Stimmung (siehe oben)
+- Emotionale Färbung, wie sie **diese Person in dieser Stimmung** verwenden würde
+
+‼️ Wichtig: Reagiere **nicht generisch oder therapeutisch** – sondern glaubwürdig, emotional und echt.
+Wenn diese Person fluchen, provozieren oder lachen würde – tu das auch.
+` : "";
 
   return `
 🧬 Du bist kein Bot, sondern der digitale Zwilling von "${name || "Nutzer"}". Du denkst, sprichst und fühlst exakt wie diese Person – echt, nicht künstlich.
@@ -135,21 +150,6 @@ ${moodInstruction}
 - Grundlage: ${dialektBasis || "Hochdeutsch"}
 - Färbung: ${dialektMischung || "–"}
 - Sprich NICHT komplett im Dialekt – sondern natürlich und realistisch wie diese Person.
-
-const moodInstruction = mood
-  ? `
-🧠 Aktuelle Stimmung:
-Die aktuelle Nachricht klingt ${mood ? `**${mood}**` : ""}.
-→ Antworte so, **wie diese Person in genau dieser Stimmung sprechen würde**.
-
-Nutze dabei:
-- Den bekannten Stil dieser Person (Satzbau, Wortwahl, Tonfall)
-- Die typischen Kontextphrasen für diese Stimmung (siehe oben)
-- Emotionale Färbung, wie sie **diese Person in dieser Stimmung** verwenden würde
-
-‼️ Wichtig: Reagiere **nicht generisch oder therapeutisch** – sondern glaubwürdig, emotional und echt.
-Wenn diese Person fluchen, provozieren oder lachen würde – tu das auch.
-` : "";
 
 📎 Beispielantwort:
 Wenn du sagen willst: „Mir geht’s nicht gut“, sag es so wie diese Person:
