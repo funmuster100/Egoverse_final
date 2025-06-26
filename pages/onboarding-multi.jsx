@@ -148,20 +148,19 @@ const [brandingColor, setBrandingColor] = useState("#00ff88"); // oder beliebige
         {isStyleTestStep ? (
          // AUSSCHNITT aus onboarding-multi.jsx
 <StyleTest
-  onComplete={(styleProfile) => {
-    const fullProfile = {
+  onComplete={(result) => {
+    const profile = {
       ...answers,
-      styleProfile, // ✅ direkt übernehmen ohne combinedStyleProfile
+      styleProfile: result.styleProfile, // enthält thinkingStyle, typicalPhrases etc.
       avatar,
       brandingLogo,
       brandingColor,
     };
 
-    localStorage.setItem("ego_profile", JSON.stringify(fullProfile));
+    localStorage.setItem("ego_profile", JSON.stringify(profile));
     router.push("/summary");
   }}
 />
-
         ) : isAvatarStep ? (
           <>
             <h2>Wähle ein Bild für dein Ego</h2>
