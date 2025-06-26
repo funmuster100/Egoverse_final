@@ -18,7 +18,7 @@ export default async function handler(req, res) {
   try {
     // ✳️ SystemPrompt + Stimmung
     const mood = profile?.currentMood || null;
-    const systemPrompt = createSystemPrompt(profile, mode, lang);
+    const systemPrompt = createSystemPrompt(profile, mode, lang, mood);
 
     // ✳️ Logging für Debug-Zwecke
     console.log("🧠 SystemPrompt:", systemPrompt);
