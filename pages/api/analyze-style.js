@@ -18,17 +18,25 @@ export default async function handler(req, res) {
           content: `Analysiere den folgenden Chatverlauf und gib eine strukturierte JSON-Antwort mit diesen Feldern zurück:
 
 {
-  stil: "...",                 // Schreibstil (locker, direkt, verspielt ...)
-  ton: "...",                  // Tonalität (freundlich, provokant ...)
-  dialektBasis: "...",         // z. B. "hochdeutsch", "schwäbisch", "bayrisch"
-  dialektMischung: "...",      // Mischung oder lokale Färbung, z. B. "leicht schwäbisch eingefärbt"
-  expressions: ["..."],        // typische Ausdrücke
-  beispielAntwort: "...",      // kurze Beispielantwort im Stil der Person
-  thinkingStyle: "...",        // Denkweise: rational, impulsiv, emotional …
-  typicalPhrases: ["..."]      // Typische Satzanfänge wie "Ganz ehrlich …"
+  stil: "...",                   // Schreibstil (locker, direkt, verspielt ...)
+  ton: "...",                    // Tonalität (freundlich, provokant ...)
+  dialektBasis: "...",           // z. B. "hochdeutsch", "schwäbisch", "bayrisch"
+  dialektMischung: "...",        // Mischung oder lokale Färbung, z. B. "leicht schwäbisch eingefärbt"
+  expressions: ["..."],          // typische Ausdrücke
+  beispielAntwort: "...",        // kurze Beispielantwort im Stil der Person
+  thinkingStyle: "...",          // Denkweise: rational, impulsiv, emotional …
+  typicalPhrases: ["..."],       // typische Satzanfänge wie "Ganz ehrlich …"
+  contextualVocabulary: {        // situative Ausdrücke je nach Stimmung
+    wütend: ["...", "..."],
+    traurig: ["...", "..."],
+    ironisch: ["...", "..."],
+    euphorisch: ["...", "..."]
+  }
 }
 
-Schreibe nur gültiges JSON zurück – ohne Kommentare oder Erklärungen.`,
+Wichtig:
+- Verwende nur Ausdrücke, die realistisch **zu dieser Person** passen.
+- Gib **nur gültiges JSON** zurück – ohne Kommentare oder Erklärungen.`,
         },
         {
           role: "user",
