@@ -63,40 +63,64 @@ export default function Chat() {
   };
 
   const send = async () => {
-    if (!input.trim()) return;
+  if (!input.trim()) return;
 
-    const updated = [...messages, { role: "user", content: input }];
-    setMessages(updated);
-    setInput("");
-    setIsTyping(true);
+  const updated = [...messages, { role: "user", content: input }];
+  setMessages(updated);
+  setInput("");
+  setIsTyping(true);
 
-    const safeProfile = { ...profile };
-    delete safeProfile.brandingLogo;
+  const safeProfile = { ...profile };
+  delete safeProfile.brandingLogo;
 
-    const recent = updated.slice(-10);
+  // 1. GPT-basierte Stimmung erkennen
+  let currentMood = "neutral";
+  try {
+    const moodRes = await fetch("/api/detect-mood", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: input }),
+    });
+    const moodData = await moodRes.json();
+    if (moodRes.ok && moodData.mood) {
+      currentMood = moodData.mood;
+      console.log("🎭 Erkannte Stimmung:", currentMood);
+    }
+  } catch (err) {
+    console.warn("⚠️ Stimmung konnte nicht erkannt werden:", err);
+  }
 
+  // 2. Profil + Stimmung kombinieren
+  const chatRequest = {
+    profile: { ...safeProfile, currentMood },
+    mode,
+    lang,
+    messages: updated.slice(-10),
+  };
+
+  // 3. GPT-Antwort abrufen
+  try {
     const res = await fetch("/api/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        profile: safeProfile,
-        mode,
-        lang,
-        messages: recent,
-      }),
+      body: JSON.stringify(chatRequest),
     });
 
     if (!res.ok) {
-      console.error("Chat API Error:", await res.text());
+      console.error("Chat API Fehler:", await res.text());
       setIsTyping(false);
       return;
     }
 
     const { reply } = await res.json();
     setMessages([...updated, { role: "assistant", content: reply }]);
+  } catch (err) {
+    console.error("Chat-Fehler:", err);
+  } finally {
     setIsTyping(false);
     inputRef.current?.focus();
-  };
+  }
+};
 
     const remember = (text) => {
     const egoProfile = JSON.parse(localStorage.getItem("ego_profile") || "{}");
