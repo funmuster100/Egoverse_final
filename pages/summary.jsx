@@ -67,11 +67,11 @@ export default function Summary() {
         <h3 style={styles.sectionTitle}>🧾 Dein Profil</h3>
         <ul style={styles.infoList}>
   <Info label="Beruf" value={profile.job} />
-  <Info label="Kommunikationsstil" value={profile.style || profile.styleProfile?.stil} />
+  <Info label="Kommunikationsstil" value={profile.style || profile.styleProfile?.stil  || "–"} />
   <Info label="Typischer Satz" value={`„${profile.phrase || "..."}“`} />
   <Info label="Werte" value={profile.values || profile.styleProfile?.values} />
-  <Info label="Humor" value={profile.humor} />
-  <Info label="Tonfall" value={profile.tone || profile.styleProfile?.ton} />
+  <Info label="Humor" value={profile.humor  || "–"} />
+  <Info label="Tonfall" value={profile.tone || profile.styleProfile?.ton  || "–"} />
   <Info label="Hobbys" value={profile.hobbies} />
   <Info label="Beziehungen" value={profile.relationships} />
   <Info label="Dialekt" value={profile.dialect || profile.styleProfile?.dialektBasis} />
