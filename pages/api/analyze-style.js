@@ -22,21 +22,28 @@ export default async function handler(req, res) {
   ton: "...",                    // Tonalität (freundlich, provokant ...)
   dialektBasis: "...",           // z. B. "hochdeutsch", "schwäbisch", "bayrisch"
   dialektMischung: "...",        // Mischung oder lokale Färbung, z. B. "leicht schwäbisch eingefärbt"
-  expressions: ["..."],          // typische Ausdrücke
+  expressions: ["..."],          // typische Ausdrücke, Wörter, Emojis
   beispielAntwort: "...",        // kurze Beispielantwort im Stil der Person
   thinkingStyle: "...",          // Denkweise: rational, impulsiv, emotional …
   typicalPhrases: ["..."],       // typische Satzanfänge wie "Ganz ehrlich …"
   contextualVocabulary: {        // situative Ausdrücke je nach Stimmung
     wütend: ["...", "..."],
+    nachdenklich: ["..."],
     traurig: ["...", "..."],
     ironisch: ["...", "..."],
     euphorisch: ["...", "..."]
   }
 }
 
-Wichtig:
-- Verwende nur Ausdrücke, die realistisch **zu dieser Person** passen.
-- Gib **nur gültiges JSON** zurück – ohne Kommentare oder Erklärungen.`,
+Wichtig: Achte besonders auf diese Dinge im Text:
+- Wie begrüßt die Person? (z. B. "Hey", "Servus", "Ey", gar nicht)
+- Welche Emoji-Nutzung ist erkennbar?
+- Gibt es dialektale Merkmale (z. B. "gell", "fei", "nedd", "alla")?
+- Wie ist der Satzbau? (kurz, lang, abgebrochen, geschliffen?)
+- Gibt es Wiederholungen, Füllwörter, typische Phrasen?
+- Ist der Text eher locker, sachlich, ironisch, flapsig?
+
+Gib ausschließlich das JSON zurück – ohne Erklärung, keine Einleitung, keine Formatierung.`,
         },
         {
           role: "user",
