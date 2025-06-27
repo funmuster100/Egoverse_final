@@ -112,16 +112,20 @@ export default function Chat() {
       return;
     }
 const { reply } = await res.json();
-    let builtText = "";
-    for (let i = 0; i < reply.length; i++) {
-      builtText += reply[i];
-      await new Promise(resolve => setTimeout(resolve, 8 / textSpeed));
-      setMessages(prev => [
-        ...prev.slice(0, -1),
-        { role: "assistant", content: builtText }
-      ]);
-    }
 
+// Erst leere Nachricht des Bots einfügen
+setMessages(prev => [...prev, { role: "assistant", content: "" }]);
+
+let builtText = "";
+for (let i = 0; i < reply.length; i++) {
+  builtText += reply[i];
+  await new Promise(resolve => setTimeout(resolve, 8 / textSpeed));
+  setMessages(prev => {
+    const updated = [...prev];
+    updated[updated.length - 1] = { role: "assistant", content: builtText };
+    return updated;
+  });
+}
     setMessages(prev => [
       ...prev.slice(0, -1),
       { role: "assistant", content: reply }
