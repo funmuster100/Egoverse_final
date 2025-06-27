@@ -283,8 +283,9 @@ const { reply } = await res.json();
                   <button
                     onClick={() => remember(m.content)}
                     className={styles["remember-button"]}
+                    title="merken"
                   >
-                    ⭐ merken
+                    ⭐
                   </button>
                 )}
               </div>
