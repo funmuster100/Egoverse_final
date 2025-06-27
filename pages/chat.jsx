@@ -111,17 +111,33 @@ export default function Chat() {
       setIsTyping(false);
       return;
     }
+const { reply } = await res.json();
+    let builtText = "";
+    for (let i = 0; i < reply.length; i++) {
+      builtText += reply[i];
+      await new Promise(resolve => setTimeout(resolve, 8 / textSpeed));
+      setMessages(prev => [
+        ...prev.slice(0, -1),
+        { role: "assistant", content: builtText }
+      ]);
+    }
 
-    const { reply } = await res.json();
-    setMessages([...updated, { role: "assistant", content: reply }]);
+    setMessages(prev => [
+      ...prev.slice(0, -1),
+      { role: "assistant", content: reply }
+    ]);
   } catch (err) {
     console.error("Chat-Fehler:", err);
+    setMessages(prev => [
+      ...prev,
+      { role: "assistant", content: "⚠️ Fehler beim Antworten." }
+    ]);
   } finally {
     setIsTyping(false);
     inputRef.current?.focus();
   }
 };
-
+    
     const remember = (text) => {
     const egoProfile = JSON.parse(localStorage.getItem("ego_profile") || "{}");
     if (!egoProfile.learningJournal) egoProfile.learningJournal = [];
