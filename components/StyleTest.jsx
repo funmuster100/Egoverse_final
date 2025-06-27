@@ -15,18 +15,18 @@ export default function StyleTest({ onComplete }) {
   const [step, setStep] = useState(0);
   const [messages, setMessages] = useState([{ from: "bot", text: QUESTIONS[0] }]);
   const [input, setInput] = useState("");
-  const [allAnswers, setAllAnswers] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [guidedAnswers, setGuidedAnswers] = useState([]);
   const [freeInput, setFreeInput] = useState("");
   const [showFreeText, setShowFreeText] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const sendAnswer = () => {
     if (!input.trim()) return;
 
     const newMessages = [...messages, { from: "user", text: input }];
     setMessages(newMessages);
-    setAllAnswers((prev) => [...prev, input]);
+    setGuidedAnswers((prev) => [...prev, input]);
     setInput("");
 
     if (step < QUESTIONS.length - 1) {
@@ -39,49 +39,65 @@ export default function StyleTest({ onComplete }) {
     }
   };
 
-  const analyzeStyle = async (allText) => {
+  const analyzeText = async (text) => {
+    const res = await fetch("/api/analyze-style", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ chatText: text }),
+    });
+    const data = await res.json();
+    return {
+      stil: data.stil,
+      ton: data.ton,
+      dialektBasis: data.dialektBasis,
+      dialektMischung: data.dialektMischung,
+      expressions: Array.isArray(data.expressions)
+        ? data.expressions
+        : data.expressions?.split(",").map((s) => s.trim()) || [],
+      beispielAntwort: data.beispielAntwort,
+      thinkingStyle: data.thinkingStyle,
+      typicalPhrases: Array.isArray(data.typicalPhrases)
+        ? data.typicalPhrases
+        : data.typicalPhrases?.split(",").map((s) => s.trim()) || [],
+      contextualVocabulary: data.contextualVocabulary,
+    };
+  };
+
+  const mergeProfileData = (a, b) => ({
+    stil: b.stil || a.stil,
+    ton: b.ton || a.ton,
+    dialektBasis: b.dialektBasis || a.dialektBasis,
+    dialektMischung: b.dialektMischung || a.dialektMischung,
+    expressions: Array.from(new Set([...(a.expressions || []), ...(b.expressions || [])])),
+    beispielAntwort: b.beispielAntwort || a.beispielAntwort,
+    thinkingStyle: b.thinkingStyle || a.thinkingStyle,
+    typicalPhrases: Array.from(new Set([...(a.typicalPhrases || []), ...(b.typicalPhrases || [])])),
+    contextualVocabulary: {
+      ...(a.contextualVocabulary || {}),
+      ...(b.contextualVocabulary || {})
+    }
+  });
+
+  const handleFreeSubmit = async () => {
+    if (!freeInput.trim()) return;
+
     setLoading(true);
+    setError("");
+
     try {
-      const res = await fetch("/api/analyze-style", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ chatText: allText }),
-      });
+      const guidedText = guidedAnswers.join("\n");
+      const freeText = freeInput;
 
-      const data = await res.json();
+      const [guidedProfile, freeProfile] = await Promise.all([
+        analyzeText(guidedText),
+        analyzeText(freeText),
+      ]);
 
-      const {
-        stil,
-        ton,
-        dialektBasis,
-        dialektMischung,
-        expressions,
-        beispielAntwort,
-        thinkingStyle,
-        typicalPhrases,
-        contextualVocabulary
-      } = data;
-
-      const result = {
-        styleProfile: {
-          stil,
-          ton,
-          dialektBasis,
-          dialektMischung,
-          expressions: Array.isArray(expressions)
-            ? expressions
-            : expressions?.split(",").map((s) => s.trim()) || [],
-          beispielAntwort,
-          thinkingStyle,
-          typicalPhrases: Array.isArray(typicalPhrases)
-            ? typicalPhrases
-            : typicalPhrases?.split(",").map((s) => s.trim()) || [],
-          contextualVocabulary,
-          originBackup: answers?.origin || null
-        }
+      const finalProfile = {
+        styleProfile: mergeProfileData(guidedProfile, freeProfile),
       };
 
-      onComplete(result);
+      onComplete(finalProfile);
     } catch (err) {
       console.error("Analysefehler:", err);
       setError("Analyse fehlgeschlagen. Bitte versuch es später nochmal.");
@@ -89,12 +105,6 @@ export default function StyleTest({ onComplete }) {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleFreeSubmit = () => {
-    if (!freeInput.trim()) return;
-    const combinedText = [...allAnswers, freeInput].join("\n");
-    analyzeStyle(combinedText);
   };
 
   return (
@@ -155,7 +165,8 @@ export default function StyleTest({ onComplete }) {
           <p style={{ marginBottom: "1rem", lineHeight: "1.6" }}>
             ✍️ Jetzt bist du dran! Schreib hier bitte frei von der Leber weg – als würdest du mit einem Freund chatten.
             <br />
-            Nutze Emojis, rede im Dialekt, mach Pausen, sei ironisch oder emotional – ganz wie du eben bist. Du kannst über deinen Tag, Gedanken, Sorgen, Ziele oder was auch immer reden.
+            Nutze Emojis, rede im Dialekt, mach Pausen, sei ironisch oder emotional – ganz wie du eben bist.
+            Erzähl einfach drauf los: dein Tag, was dich nervt, was dich freut, was du denkst.
           </p>
           <textarea
             value={freeInput}
