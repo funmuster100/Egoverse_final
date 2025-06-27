@@ -222,6 +222,8 @@ for (let i = 0; i < reply.length; i++) {
               <option value="kritiker">Kritiker</option>
               <option value="reflexion">Reflexion</option>
             </select>
+            </div>
+          <div className={styles["chat-header-right"]}>
             <button onClick={() => setMessages([]) || localStorage.removeItem("ego_chat_history")}>🗑️</button>
             <button onClick={toggleTheme}>🌓</button>
             <button onClick={() => setShowSettings(true)}>⚙️</button>
