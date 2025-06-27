@@ -167,21 +167,22 @@
 /* MERKEN-BUTTON jetzt korrekt positioniert */
 .bubble-container .remember-button {
   position: absolute;
-  top: 6px;
-  right: 8px;
-  background: rgba(255, 255, 255, 0.06);
-  border: none;
+  top: -10px;
+  right: -10px;
+  background: #1e293b;
+  border: 1px solid #10b981;
   border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  font-size: 1rem;
+  width: 22px;
+  height: 22px;
+  font-size: 0.85rem;
   color: #10b981;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(6px);
+  box-shadow: 0 0 4px rgba(16, 185, 129, 0.5);
   transition: transform 0.2s ease, background 0.2s ease;
+  z-index: 1;
 }
 
 .bubble-container .remember-button:hover {
