@@ -277,7 +277,8 @@ const { reply } = await res.json();
                 height={40}
                 className={styles["avatar"]}
               />
-              <div className={styles["bubble"]}>{m.content}
+              <div className={styles["bubble"]}>
+                <span>{m.content}</span>
                 {m.role === "assistant" && (
                   <button
                     onClick={() => remember(m.content)}
