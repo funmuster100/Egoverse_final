@@ -188,29 +188,19 @@ const { reply } = await res.json();
 
   return (
     <>
-      <div
-        className={styles["chat-container"]}
-        style={{ borderTopColor: brandingColor }}
-      >
-        {/* Header */}
-        <div
-          className={styles["chat-header"]}
-          style={{ borderBottomColor: brandingColor }}
-        >
+     <div className={styles["chat-container"]}>
+        {/* Header-Leiste mit allen Funktionen in einer Zeile */}
+        <div className={styles["chat-header"]}>
           <div className={styles["chat-header-left"]}>
             {brandingLogo && (
-              <img
-                src={brandingLogo}
-                alt="Branding Logo"
-                className={styles["branding-logo"]}
-              />
+              <img src={brandingLogo} alt="Logo" className={styles["branding-logo"]} />
             )}
             <label htmlFor="avatar-upload" style={{ cursor: "pointer" }}>
               <Image
                 src={getAvatar("user")}
-                alt="User Avatar"
-                width={36}
-                height={36}
+                alt="User"
+                width={34}
+                height={34}
                 className={styles["avatar"]}
               />
             </label>
@@ -221,60 +211,28 @@ const { reply } = await res.json();
               style={{ display: "none" }}
               onChange={handleAvatarUpload}
             />
-            <div>
-              <div className={styles["chat-title"]}>Du (Ego)</div>
-              <div className={styles["chat-status"]}>
-                <span
-                  className={styles["status-dot"]}
-                  style={{ background: brandingColor }}
-                />{" "}
-                Online
-              </div>
-            </div>
+            <select value={mode} onChange={(e) => setMode(e.target.value)} className={styles["chat-mode-selector"]}>
+              <option value="default">Ich selbst</option>
+              <option value="coach">Coach</option>
+              <option value="mentor">Mentor</option>
+              <option value="kritiker">Kritiker</option>
+              <option value="reflexion">Reflexion</option>
+            </select>
+            <button onClick={() => setMessages([]) || localStorage.removeItem("ego_chat_history")}>🗑️</button>
+            <button onClick={toggleTheme}>🌓</button>
+            <button onClick={() => setShowSettings(true)}>⚙️</button>
           </div>
-         <div className={styles["chat-header-right"]}>
-  <button onClick={toggleTheme} title="Theme wechseln">🌓</button>
-  <button onClick={() => setShowSettings(true)} title="Einstellungen">⚙️</button>
-</div>
         </div>
 
-        {/* Mode */}
-        <div className={styles["chat-mode-selector"]}>
-          <label>Modus:</label>
-          <select value={mode} onChange={(e) => setMode(e.target.value)}>
-            <option value="default">🧠 Ich selbst</option>
-            <option value="coach">🗣️ Coach</option>
-            <option value="mentor">🧓 Mentor</option>
-            <option value="kritiker">⚡ Kritiker</option>
-            <option value="reflexion">Reflexion</option>
-          </select>
-          <button
-            className={styles["chat-reset"]}
-            onClick={() => {
-              setMessages([]);
-              localStorage.removeItem("ego_chat_history");
-            }}
-          >
-            🗑️
-          </button>
-        </div>
-
-        <div className={styles["chat-mode-indicator"]}>
-          Aktueller Modus: <strong>{mode}</strong>
-        </div>
-
-        {/* Messages */}
+        {/* Nachrichtenbereich */}
         <div className={styles["chat-messages"]}>
           {messages.map((m, i) => (
-            <div
-              key={i}
-              className={`${styles["bubble-container"]} ${styles[m.role]}`}
-            >
+            <div key={i} className={`${styles["bubble-container"]} ${styles[m.role]}`}>
               <Image
                 src={getAvatar(m.role)}
                 alt={`${m.role}-avatar`}
-                width={40}
-                height={40}
+                width={36}
+                height={36}
                 className={styles["avatar"]}
               />
               <div className={styles["bubble"]}>
@@ -290,7 +248,6 @@ const { reply } = await res.json();
                 )}
               </div>
             </div>
-            
           ))}
           {isTyping && (
             <div className={styles["typing-bubble"]}>
@@ -302,7 +259,7 @@ const { reply } = await res.json();
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Input */}
+        {/* Eingabe */}
         <div className={styles["chat-input"]}>
           <input
             ref={inputRef}
@@ -317,43 +274,20 @@ const { reply } = await res.json();
         </div>
       </div>
 
-      {/* Settings */}
+      {/* Einstellungen */}
       {showSettings && (
-        <div
-          className={styles["settings-modal"]}
-          onClick={() => setShowSettings(false)}
-        >
-          <div
-            className={styles["settings-content"]}
-            onClick={(e) => e.stopPropagation()}
-          >
+        <div className={styles["settings-modal"]} onClick={() => setShowSettings(false)}>
+          <div className={styles["settings-content"]} onClick={(e) => e.stopPropagation()}>
             <h2>Einstellungen</h2>
             {profile?.isInfluencer === "yes" && (
               <>
-                <hr />
-                <h3>Branding</h3>
                 <label>
                   Logo:
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleBrandingLogoUpload}
-                  />
+                  <input type="file" accept="image/*" onChange={handleBrandingLogoUpload} />
                 </label>
-                {brandingLogo && (
-                  <img
-                    src={brandingLogo}
-                    alt="Logo"
-                    className={styles["branding-logo"]}
-                  />
-                )}
                 <label>
                   Farbe:
-                  <input
-                    type="color"
-                    value={brandingColor}
-                    onChange={handleBrandingColorChange}
-                  />
+                  <input type="color" value={brandingColor} onChange={handleBrandingColorChange} />
                 </label>
               </>
             )}
