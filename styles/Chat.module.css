@@ -166,18 +166,28 @@
 
 /* MERKEN-BUTTON jetzt korrekt positioniert */
 .bubble-container .remember-button {
-  margin-top: 6px;
-  background: transparent;
-  border: 1px solid #10b981;
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  font-size: 1rem;
   color: #10b981;
-  border-radius: 6px;
-  padding: 4px 10px;
   cursor: pointer;
-  font-size: 0.8rem;
-  align-self: flex-start;
-  margin-left: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(6px);
+  transition: transform 0.2s ease, background 0.2s ease;
 }
 
+.bubble-container .remember-button:hover {
+  transform: scale(1.15);
+  background: rgba(255, 255, 255, 0.15);
+}
 /* TYPING – nur Punkte, nicht Bubble animieren */
 .typing-bubble {
   display: flex;
