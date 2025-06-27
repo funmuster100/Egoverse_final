@@ -76,7 +76,8 @@ export default function StyleTest({ onComplete }) {
           typicalPhrases: Array.isArray(typicalPhrases)
             ? typicalPhrases
             : typicalPhrases?.split(",").map((s) => s.trim()) || [],
-          contextualVocabulary
+          contextualVocabulary,
+          originBackup: answers?.origin || null
         }
       };
 
