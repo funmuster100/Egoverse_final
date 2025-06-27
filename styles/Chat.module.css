@@ -248,3 +248,84 @@
     padding: 8px 12px;
   }
 }
+/* --- Responsive Tweaks für Mobile --- */
+@media (max-width: 768px) {
+  .chat-header {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 8px 12px;
+    gap: 6px;
+  }
+
+  .chat-header-left {
+    gap: 8px;
+  }
+
+  .chat-header-right {
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .chat-header-right select,
+  .chat-reset,
+  .chat-header-right button {
+    font-size: 14px;
+    padding: 6px;
+  }
+
+  .chat-input {
+    padding: 8px;
+    gap: 6px;
+  }
+
+  .chat-input input {
+    font-size: 14px;
+    padding: 8px 10px;
+  }
+
+  .chat-input button {
+    padding: 8px 12px;
+  }
+
+  .bubble {
+    font-size: 14px;
+    padding: 8px 12px;
+    max-width: 85%;
+  }
+}
+
+@media (max-width: 480px) {
+  .chat-header-left,
+  .chat-header-right {
+    width: 100%;
+  }
+
+  .chat-header-left {
+    justify-content: flex-start;
+  }
+
+  .chat-header-right {
+    justify-content: flex-start;
+    border-top: 1px solid #2a3942;
+    padding-top: 6px;
+  }
+
+  .chat-header {
+    padding-bottom: 6px;
+  }
+
+  .chat-input {
+    flex-direction: column;
+  }
+
+  .chat-input input,
+  .chat-input button {
+    width: 100%;
+    margin: 0;
+  }
+
+  .chat-input button {
+    margin-top: 6px;
+  }
+}
