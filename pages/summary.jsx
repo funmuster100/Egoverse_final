@@ -50,53 +50,52 @@ export default function Summary() {
   return (
     <div style={styles.container}>
       <div style={styles.card}>
-        {profile.avatar ? (
-          <Image
-            src={profile.avatar}
-            alt="Avatar"
-            width={80}
-            height={80}
-            style={styles.avatarImage}
-          />
-        ) : (
-          <div style={styles.avatarFallback}>🧠</div>
-        )}
-
-        <h2 style={styles.name}>Willkommen, {profile.name || "unbekannte Person"}</h2>
+        <div style={styles.avatarBlock}>
+          {profile.avatar ? (
+            <Image
+              src={profile.avatar}
+              alt="Avatar"
+              width={100}
+              height={100}
+              style={styles.avatarImage}
+            />
+          ) : (
+            <div style={styles.avatarFallback}>🧠</div>
+          )}
+          <h2 style={styles.name}>
+            Willkommen, {profile.name || "unbekannte Person"}
+          </h2>
+        </div>
 
         <h3 style={styles.sectionTitle}>🧾 Dein Profil</h3>
         <ul style={styles.infoList}>
-  <Info label="Beruf" value={profile.job} />
-  <Info label="Kommunikationsstil" value={profile.style || profile.styleProfile?.stil  || "–"} />
-  <Info label="Typischer Satz" value={`„${profile.phrase || "..."}“`} />
-  <Info label="Werte" value={profile.values || profile.styleProfile?.values} />
-  <Info label="Humor" value={profile.humor  || "–"} />
-  <Info label="Tonfall" value={profile.tone || profile.styleProfile?.ton  || "–"} />
-  <Info label="Hobbys" value={profile.hobbies} />
-  <Info label="Beziehungen" value={profile.relationships} />
-  <Info label="Dialekt" value={profile.dialect || profile.styleProfile?.dialektBasis} />
-  <Info label="Denkweise" value={profile.thinkingStyle || profile.styleProfile?.thinkingStyle} />
-  <Info
-    label="Typische Ausdrücke"
-    value={(profile.expressions || profile.styleProfile?.expressions || []).join(", ")}
-  />
-  <Info
-    label="Typische Phrasen"
-    value={(profile.typicalPhrases || profile.styleProfile?.typicalPhrases || []).join(", ")}
-  />
-</ul>
+          <Info label="Beruf" value={profile.job} />
+          <Info label="Kommunikationsstil" value={profile.style || profile.styleProfile?.stil} />
+          <Info label="Typischer Satz" value={`„${profile.phrase || "..."}“`} />
+          <Info label="Werte" value={profile.values || profile.styleProfile?.values} />
+          <Info label="Humor" value={profile.humor} />
+          <Info label="Tonfall" value={profile.tone || profile.styleProfile?.ton} />
+          <Info label="Hobbys" value={profile.hobbies} />
+          <Info label="Beziehungen" value={profile.relationships} />
+          <Info label="Dialekt" value={profile.dialect || profile.styleProfile?.dialektBasis} />
+          <Info label="Denkweise" value={profile.thinkingStyle || profile.styleProfile?.thinkingStyle} />
+          <Info label="Typische Ausdrücke" value={(profile.expressions || profile.styleProfile?.expressions || []).join(", ")} />
+          <Info label="Typische Phrasen" value={(profile.typicalPhrases || profile.styleProfile?.typicalPhrases || []).join(", ")} />
+        </ul>
 
         <h3 style={styles.sectionTitle}>🗣️ So klingt dein Ego-Zwilling</h3>
         <div style={styles.exampleBox}>
           {profile.beispielAntwort || exampleReply}
         </div>
 
-        <button style={styles.button} onClick={() => router.push("/chat")}>
-          Starte dein Gespräch
-        </button>
-        <button style={styles.secondaryButton} onClick={downloadProfile}>
-          Profil herunterladen
-        </button>
+        <div style={styles.buttonRow}>
+          <button style={styles.button} onClick={() => router.push("/chat")}>
+            Starte dein Gespräch
+          </button>
+          <button style={styles.secondaryButton} onClick={downloadProfile}>
+            Profil herunterladen
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -112,44 +111,45 @@ function Info({ label, value }) {
 
 const styles = {
   container: {
-    background: "linear-gradient(to bottom, #0c0c0c, #1a1a1a)",
-    color: "#eee",
+    background: "radial-gradient(circle at top, #1e1e1e, #0a0a0a)",
+    color: "#f0f0f0",
     minHeight: "100vh",
+    padding: "2rem",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    padding: 24,
   },
   card: {
-    background: "rgba(255, 255, 255, 0.05)",
-    border: "1px solid rgba(255, 255, 255, 0.1)",
-    borderRadius: 16,
-    padding: 32,
+    background: "rgba(255,255,255,0.04)",
+    border: "1px solid rgba(255,255,255,0.08)",
+    borderRadius: 20,
+    padding: "2rem",
+    maxWidth: 680,
     width: "100%",
-    maxWidth: 600,
-    backdropFilter: "blur(8px)",
-    boxShadow: "0 8px 30px rgba(0,0,0,0.5)",
+    boxShadow: "0 8px 30px rgba(0,0,0,0.6)",
+    backdropFilter: "blur(10px)",
+  },
+  avatarBlock: {
+    textAlign: "center",
+    marginBottom: "1.5rem",
   },
   avatarImage: {
     borderRadius: "50%",
-    marginBottom: 16,
     objectFit: "cover",
+    border: "3px solid #00ffaa",
   },
   avatarFallback: {
-    fontSize: 56,
-    textAlign: "center",
+    fontSize: 64,
     marginBottom: 16,
   },
   name: {
-    textAlign: "center",
-    fontSize: "1.6rem",
-    marginBottom: 24,
+    fontSize: "1.8rem",
+    marginTop: 12,
   },
   sectionTitle: {
-    marginTop: 24,
-    marginBottom: 8,
     fontSize: "1.2rem",
     color: "#00ffaa",
+    margin: "1.5rem 0 0.5rem",
   },
   infoList: {
     listStyle: "none",
@@ -157,38 +157,45 @@ const styles = {
     margin: 0,
   },
   infoItem: {
-    marginBottom: 10,
-    lineHeight: 1.4,
+    marginBottom: 8,
+    lineHeight: 1.6,
   },
   label: {
-    color: "#00ff88",
+    color: "#00ffcc",
+    fontWeight: 600,
   },
   exampleBox: {
     background: "#111",
-    padding: "12px 16px",
-    borderRadius: 8,
-    marginTop: 8,
+    padding: "1rem",
+    borderRadius: "12px",
     fontStyle: "italic",
+    marginTop: 8,
     whiteSpace: "pre-wrap",
+    color: "#eee",
+  },
+  buttonRow: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "1rem",
+    marginTop: "2rem",
   },
   button: {
-    marginTop: 24,
     background: "linear-gradient(to right, #00ffcc, #00ff88)",
-    color: "#111",
     border: "none",
-    borderRadius: 8,
-    padding: "10px 20px",
+    borderRadius: 10,
+    padding: "12px 20px",
     fontSize: "1rem",
+    fontWeight: "bold",
+    color: "#111",
     cursor: "pointer",
   },
   secondaryButton: {
-    marginTop: 12,
     background: "none",
-    border: "1px solid #00ff88",
-    color: "#00ff88",
-    borderRadius: 8,
-    padding: "8px 16px",
-    fontSize: "0.9rem",
+    border: "1px solid #00ffaa",
+    color: "#00ffaa",
+    borderRadius: 10,
+    padding: "10px 18px",
+    fontSize: "0.95rem",
     cursor: "pointer",
   },
 };
